@@ -43,7 +43,8 @@ def printMenu():
     print("1. Citire lista")
     print("2. Afisare cea mai lunga subsecventa de palindroame")
     print("3. Afisare cea mai lunga subsecventa de numere cu cifre prime")
-    print("4. Iesire")
+    print("4. Toate numerele sunt divizibile cu k (citit).")
+    print("x. Iesire")
 
 def citireLista():
     l = []
@@ -91,22 +92,56 @@ def testSubsecventaMaxElementeCifrePrime():
     assert SubsecventaMaxElementeCifrePrime([10,12,8]) == []
     assert SubsecventaMaxElementeCifrePrime([]) == []
     assert SubsecventaMaxElementeCifrePrime([10,11,55,35]) == [55,35]
+    assert SubsecventaMaxElementeCifrePrime([10,55,35,10]) == [55,35,]
+def toateElementeleNumereDivizibileCuK(l,k):
+    '''
+    Verifica daca toate elem. din lista sunt divizibile cu un nr. k citi de la tastatura
+    :param k: numarul citit de la tastatura
+    :param l: lista de numere intregi
+    :return: True daca toata elem din lista sunt div. cu k sau False daca nu
+    '''
+    for x in l:
+        if x % k != 0:
+            return False
+    return True
+def test_toateElementeleNumereDivizibileCuK():
+    assert toateElementeleNumereDivizibileCuK([12,14,16],2) is True
+    assert toateElementeleNumereDivizibileCuK([10,11,13],3) is False
+    assert toateElementeleNumereDivizibileCuK([13,10,12],2) is False
+    assert toateElementeleNumereDivizibileCuK([12,16,64],4) is True
+    assert toateElementeleNumereDivizibileCuK([],100) is True
+def SubsecventatoateElementeleNumereDivizibileCuK(l, k):
+    SubsecventaMax = []
+    for i in range(len(l)):
+        for j in range(i, len(l)):
+            if toateElementeleNumereDivizibileCuK(l[i:j + 1], k) and len(l[i:j + 1]) > len(SubsecventaMax):
+                SubsecventaMax = l[i:j + 1]
+    return SubsecventaMax
+def test_SubsecventatoateElementeleNumereDivizibileCuK():
+    assert SubsecventatoateElementeleNumereDivizibileCuK([10,12],2) == [10,12]
+    assert SubsecventatoateElementeleNumereDivizibileCuK([9,11],2) == []
+    assert SubsecventatoateElementeleNumereDivizibileCuK([9,8,12,15],3) == [12,15]
 def main():
     testToateElementelePalindroame()
     testSubsecventaMaxElementePalindroame()
     testNumereCuCIfrePrimeDinLista()
     testSubsecventaMaxElementeCifrePrime()
+    test_toateElementeleNumereDivizibileCuK()
+    test_SubsecventatoateElementeleNumereDivizibileCuK()
     l = []
     while True:
         printMenu()
-        optiune = int(input("Da-ti optiunea: "))
-        if optiune == 1:
+        optiune = input("Da-ti optiunea: ")
+        if optiune == "1":
             l=citireLista()
-        elif optiune == 2:
+        elif optiune == "2":
             print(SubsecventaMaxElementePalindroame(l))
-        elif optiune == 3:
+        elif optiune == "3":
             print(SubsecventaMaxElementeCifrePrime(l))
-        elif optiune == 4:
+        elif optiune == "4":
+            k = int(input("Divizor= "))
+            print(SubsecventatoateElementeleNumereDivizibileCuK(l, k))
+        elif optiune == "x":
             break
         else:
             print("Optiune gresita, reincearca")
